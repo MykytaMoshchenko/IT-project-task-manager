@@ -40,4 +40,10 @@ class PositionAdmin(admin.ModelAdmin):
 @admin.register(Task)
 class Task(admin.ModelAdmin):
     search_fields = ("name",)
-    list_filter = ("name",)
+    list_filter = (
+        "name",
+        "priority",
+        "deadline",
+        "task_type",
+        "is_completed"
+    )
