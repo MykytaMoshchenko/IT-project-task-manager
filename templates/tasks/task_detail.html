@@ -17,9 +17,9 @@
   </form>
 
   <form method="post" action="{% url 'tasks:task-update' pk=task.id %}" class="d-inline">
-    {% csrf_token %}
-    <input type="hidden" name="is_completed" value="False">
-    <button type="submit" class="btn btn-warning">Mark as Not Completed</button>
+  {% csrf_token %}
+  <input type="hidden" name="is_completed" value="False">
+  <button type="submit" class="btn btn-warning">Mark as Not Completed</button>
   </form>
 
 
@@ -28,8 +28,9 @@
   <p><strong>Description:</strong> {{ task.description }}</p>
   <p>
     <strong>Assignees:</strong> {% for assignee in task.assignees.all %}
-  {{ assignee.username }}
+      <a href={% url 'tasks:worker-detail' pk=assignee.id %}>{{ assignee.username }}</a>
   {% endfor %}
   </p>
   <p><strong>Is Completed:</strong> {{ task.is_completed }}</p>
+  <a href="{% url 'tasks:assign-member' pk=task.id %}" class="btn btn-primary">Assign Team Member</a>
 {% endblock %}

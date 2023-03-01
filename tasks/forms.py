@@ -29,6 +29,15 @@ class WorkerCreationForm(UserCreationForm):
         )
 
 
+class AssigneesForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ["assignees"]
+
+    def clean_position(self):
+        return validate_position(self.cleaned_data["assignees"])
+
+
 class WorkerPositionUpdateForm(forms.ModelForm):
     class Meta:
         model = Worker

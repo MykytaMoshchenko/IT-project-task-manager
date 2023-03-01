@@ -11,7 +11,7 @@ from tasks.views import (
     TaskDetailView,
     TaskCreateView,
     TaskUpdateView,
-    TaskDeleteView
+    TaskDeleteView, TaskAssignView,
 )
 
 
@@ -45,6 +45,7 @@ urlpatterns = [
         TaskDeleteView.as_view(),
         name="task-delete",
     ),
+    path("tasks/<int:pk>/assign/", TaskAssignView.as_view(), name="assign-member"),
     ]
 
 app_name = "tasks"

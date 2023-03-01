@@ -1,17 +1,20 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.views import generic
+from django.utils.decorators import method_decorator
+from django.views import generic, View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.http import require_POST
 
 from .forms import (
     WorkerSearchForm,
     WorkerCreationForm,
     WorkerPositionUpdateForm,
     TaskCreationForm,
-    TaskSearchForm
+    TaskSearchForm,
+    AssigneesForm
 )
 from .models import TaskType, Worker, Task, Position
 
@@ -105,18 +108,30 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TaskListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
+        sort_by = self.request.GET.get("sort_by", "")
         context["search_form"] = TaskSearchForm(
             initial={"name": name}
         )
-
+        context["sort_by"] = sort_by
         return context
 
     def get_queryset(self):
         queryset = Task.objects.prefetch_related("assignees")
         name = self.request.GET.get("name")
+        sort_by = self.request.GET.get("sort_by")
 
         if name:
             return queryset.filter(name__icontains=name)
+
+        if sort_by:
+            if sort_by == "name":
+                queryset = queryset.order_by("name")
+            elif sort_by == "deadline":
+                queryset = queryset.order_by("deadline")
+            elif sort_by == "priority":
+                queryset = queryset.order_by("-priority")
+            elif sort_by == "completed":
+                queryset = queryset.order_by("-is_completed")
 
         return queryset
 
@@ -163,3 +178,23 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
     success_url = reverse_lazy("tasks:tasks-list")
+
+
+@method_decorator(require_POST, name='post')
+class TaskAssignView(View):
+    template_name = "tasks/assign_user.html"
+
+    def get(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        form = AssigneesForm(initial={"assignees": task.assignees.all()})
+        return render(request, self.template_name, {"form": form, "task": task})
+
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        form = AssigneesForm(request.POST)
+        if form.is_valid():
+            assignees = form.cleaned_data["assignees"]
+            task.assignees.set(assignees)
+            task.save()
+            return redirect("tasks:task-detail", pk=task.id)
+        return render(request, self.template_name, {"form": form, "task": task})
