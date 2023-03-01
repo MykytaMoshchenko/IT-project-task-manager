@@ -2,11 +2,14 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
-    Car list
-    <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
-      Create
-    </a>
+  <h1 class="text-center">
+    Tasks list
+    {% if request.user.is_superuser %}
+      <a href="/admin/tasks/task/add/" class="btn btn-primary link-to-page float-">
+        Create Task
+      </a>
+    {% endif %}
+
   </h1>
 
   <form action="" method="get" class="form-inline">
@@ -14,16 +17,46 @@
     <input type="submit" value="Find" class="btn btn-secondary">
   </form>
 
-  {% if car_list %}
-    <ul>
-      {% for car in car_list %}
-        <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
-        </li>
-      {% endfor %}
-    </ul>
+  {% if task_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Task type</th>
+        <th>Deadline</th>
+        <th>Is completed</th>
+        <th>Priority</th>
+        <th>Assignees</th>
+      </tr>
+        {% for task in task_list %}
+          <tr>
+            <td>
+              <a href="{% url 'tasks:task-detail' pk=task.id %}">{{ task.id }}</a>
+            </td>
+            <td>
+              {{ task.name }}
+            </td>
+            <td>
+              {{ task.task_type }}
+            </td>
+            <td>
+                {{ task.deadline }}
+            </td>
+            <td>
+                {{ task.is_completed }}
+            </td>
+            <td>
+                {{ task.priority }}
+            </td>
+            <td>
+                {% for assignee in task.assignees.all %}
+                {{ assignee.username }}
+                {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+    </table>
   {% else %}
-    <p>There are no cars in taxi</p>
+    <p>There are no tasks for the team.</p>
   {% endif %}
 {% endblock %}

@@ -2,10 +2,10 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
+    <h1 class="text-center">
+      Workers List
+      <a href="{% url 'tasks:worker-create' %}" class="btn btn-warning link-to-page">
+        Add Worker
       </a>
     </h1>
 
@@ -15,27 +15,27 @@
 
   </form>
 
-    {% if driver_list %}
+    {% if worker_list %}
     <table class="table">
       <tr>
         <th>ID</th>
         <th>Username</th>
         <th>First name</th>
         <th>Last name</th>
-        <th>License number</th>
+        <th>Position</th>
       </tr>
-    {% for driver in driver_list %}
+    {% for worker in worker_list %}
       <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
+        <td>{{ worker.id }}</td>
+        <td><a class="text-white" href="{{ worker.get_absolute_url }}">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
+        <td>{{ worker.first_name }}</td>
+        <td>{{ worker.last_name }}</td>
+        <td>{{ worker.position }}</td>
       </tr>
     {% endfor %}
 
     </table>
     {% else %}
-      <p>There are no drivers in the service.</p>
+      <p>There are no workers.</p>
     {% endif %}
 {% endblock %}

@@ -2,7 +2,7 @@
 {% if is_paginated %}
   <ul class="pagination">
     {% if page_obj.has_previous %}
-      <li class="page-item">
+      <li class="page-item ">
         <a href="?{% query_transform request page=page_obj.previous_page_number %}" class="page-link">prev</a>
       </li>
     {% endif %}
