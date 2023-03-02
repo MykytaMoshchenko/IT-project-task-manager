@@ -2,11 +2,10 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>Set Task Status to Completed</h1>
-  <form action="" method="post" novalidate>
+  <h1>Create a Task</h1>
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
-
-    <input type="submit" value="Task is Completed - CONFIRM" class="btn btn-primary">
+    <button type="submit" class="btn btn-primary">Create Task</button>
   </form>
-{% endblock %
+{% endblock %}

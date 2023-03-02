@@ -52,8 +52,8 @@ class Task(models.Model):
         MEDIUM = "Medium", "Medium"
         LOW = "Low", "Low"
 
-    name = models.CharField(max_length=255)
-    description = models.TextField()
+    name = models.CharField(max_length=50)
+    description = models.TextField(max_length=300)
     deadline = models.DateField()
     is_completed = models.BooleanField(verbose_name="task_status", default=False)
     priority = models.CharField(max_length=6, choices=PriorityType.choices)

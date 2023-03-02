@@ -11,7 +11,11 @@ from tasks.views import (
     TaskDetailView,
     TaskCreateView,
     TaskUpdateView,
-    TaskDeleteView, TaskAssignView,
+    TaskDeleteView,
+    TaskAssignView,
+    NotificationView,
+    TaskUrgentHighView,
+    TaskCompletedView
 )
 
 
@@ -33,6 +37,11 @@ urlpatterns = [
         name="worker-delete",
     ),
     path("tasks/", TaskListView.as_view(), name="tasks-list"),
+    path(
+        "tasks/urgnent_high/",
+        TaskUrgentHighView.as_view(),
+        name="high-priority-tasks-list"
+    ),
     path("tasks/<int:pk>/", TaskDetailView.as_view(), name="task-detail"),
     path("tasks/create/", TaskCreateView.as_view(), name="task-create"),
     path(
@@ -45,7 +54,20 @@ urlpatterns = [
         TaskDeleteView.as_view(),
         name="task-delete",
     ),
-    path("tasks/<int:pk>/assign/", TaskAssignView.as_view(), name="assign-member"),
+    path("tasks/<int:pk>/assign/",
+         TaskAssignView.as_view(),
+         name="assign-member"
+    ),
+    path(
+        "notifications/",
+        NotificationView.as_view(),
+        name="notifications"
+    ),
+    path(
+        "tasks/completed/",
+        TaskCompletedView.as_view(),
+        name="tasks-completed-list"
+    ),
     ]
 
 app_name = "tasks"

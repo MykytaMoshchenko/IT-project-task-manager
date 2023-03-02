@@ -4,8 +4,8 @@
 {% block content %}
   <h1 class="text-center">
     Tasks list
-    {% if request.user.is_superuser %}
-      <a href="/admin/tasks/task/add/" class="btn btn-primary link-to-page float-">
+    {% if request.user.is_staff %}
+      <a href="{% url 'tasks:task-create' %}" class="btn btn-primary link-to-page float-">
         Create Task
       </a>
     {% endif %}
@@ -50,7 +50,7 @@
             </td>
             <td>
                 {% for assignee in task.assignees.all %}
-                {{ assignee.username }}
+                {{ assignee.username }} <br>
                 {% endfor %}
             </td>
           </tr>

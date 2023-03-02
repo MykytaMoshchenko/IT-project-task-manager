@@ -20,6 +20,7 @@ def validate_position(position):
 
 
 class WorkerCreationForm(UserCreationForm):
+
     class Meta(UserCreationForm.Meta):
         model = Worker
         fields = UserCreationForm.Meta.fields + (
@@ -54,25 +55,6 @@ class WorkerSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search by username"})
     )
-
-
-class TaskCreationForm(forms.ModelForm):
-    assignees = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.select_related("position"),
-        widget=forms.CheckboxSelectMultiple,
-    )
-    deadline = forms.DateField(widget=DateInput)
-
-    class Meta:
-        model = Task
-        fields = [
-            "name",
-            "description",
-            "deadline",
-            "priority",
-            "task_type",
-            "assignees"
-        ]
 
 
 class TaskSearchForm(forms.Form):

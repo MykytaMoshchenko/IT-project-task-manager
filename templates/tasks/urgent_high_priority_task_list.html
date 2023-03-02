@@ -1,62 +1,14 @@
-{% extends "base.html" %}
-{% load crispy_forms_filters %}
+{% extends 'base.html' %}
 
 {% block content %}
-  <h1 class="text-center">
-    Tasks list
-    {% if request.user.is_superuser %}
-      <a href="/admin/tasks/task/add/" class="btn btn-primary link-to-page float-">
-        Create Task
-      </a>
-    {% endif %}
-
-  </h1>
-
-  <form action="" method="get" class="form-inline">
-    {{search_form|crispy}}
-    <input type="submit" value="Find" class="btn btn-secondary">
-  </form>
-
-  {% if task_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Task type</th>
-        <th>Deadline</th>
-        <th>Is completed</th>
-        <th>Priority</th>
-        <th>Assignees</th>
-      </tr>
-        {% for task in task_list %}
-          <tr>
-            <td>
-              <a href="{% url 'tasks:task-detail' pk=task.id %}">{{ task.id }}</a>
-            </td>
-            <td>
-              {{ task.name }}
-            </td>
-            <td>
-              {{ task.task_type }}
-            </td>
-            <td>
-                {{ task.deadline }}
-            </td>
-            <td>
-                {{ task.is_completed }}
-            </td>
-            <td>
-                {{ task.priority }}
-            </td>
-            <td>
-                {% for assignee in task.assignees.all %}
-                {{ assignee.username }} <br>
-                {% endfor %}
-            </td>
-          </tr>
-        {% endfor %}
-    </table>
-  {% else %}
-    <p>There are no tasks for the team.</p>
-  {% endif %}
+  <h1>Team Tasks with Urgent&High Priority</h1>
+  <ul>
+    {% for task in tasks_uh %}
+      <li>
+        <a href="{% url 'tasks:task-detail' pk=task.id %}">{{ task.name }}</a> - {{ task.deadline }}
+      </li>
+    {% empty %}
+      <p>No tasks with soon deadlines.</p>
+    {% endfor %}
+  </ul>
 {% endblock %}

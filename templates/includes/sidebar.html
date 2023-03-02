@@ -1,8 +1,8 @@
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/assets/img/sidebar-1.jpg">
       <div class="logo">
         <a target="_blank" rel="noopener noreferrer" 
-           href="#" class="simple-text logo-normal">
-           NAVIGATION
+           href="/" class="simple-text logo-normal">
+           TASK MANAGER
         </a>
       </div>
       <div class="sidebar-wrapper">
@@ -22,9 +22,21 @@
             </a>
           </li>
           <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'tasks:workers-list' %}">
+              <i class="material-icons">people</i>
+              <p>Dream Team Members</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
             <a class="nav-link" href="{% url 'tasks:tasks-list' %}">
               <i class="material-icons">content_paste</i>
               <p>Team Task List</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'tasks:task-create' %}">
+              <i class="material-icons">create</i>
+              <p>Create Task</p>
             </a>
           </li>
           <li class="nav-item ">

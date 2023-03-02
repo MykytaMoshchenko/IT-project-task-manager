@@ -3,9 +3,9 @@
 
 {% block content %}
     <h1 class="text-center">
-      Workers List
-      <a href="{% url 'tasks:worker-create' %}" class="btn btn-warning link-to-page">
-        Add Worker
+      Team Members
+      <a href="{% url 'tasks:worker-create' %}" class="btn btn-success link-to-page">
+        Add Team Member
       </a>
     </h1>
 
@@ -27,7 +27,7 @@
     {% for worker in worker_list %}
       <tr>
         <td>{{ worker.id }}</td>
-        <td><a class="text-white" href="{{ worker.get_absolute_url }}">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
+        <td><a href="{{ worker.get_absolute_url }}">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
         <td>{{ worker.first_name }}</td>
         <td>{{ worker.last_name }}</td>
         <td>{{ worker.position }}</td>
