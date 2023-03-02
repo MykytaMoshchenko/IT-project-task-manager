@@ -21,7 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "*e0%s^^4oc8^oop1s^%j2mxdg^4pzoyi5_vu-cj-1!xispw1x0"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "tasks",
     "crispy_forms",
+    "crispy_bootstrap4",
     "debug_toolbar"
 ]
 
