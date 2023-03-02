@@ -27,9 +27,9 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 # DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
-# DEBUG = "RENDER" not in os.environ
+DEBUG = "RENDER" not in os.environ
 
 
 ALLOWED_HOSTS = ["127.0.0.1", "https://it-task-manager-sdp7.onrender.com"]
