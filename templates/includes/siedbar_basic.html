@@ -1,0 +1,12 @@
+<ul class="sidebar-nav list-group">
+  {% if user.is_authenticated %}
+    <li class="list-group-item bg-warning">User: <a class="text-black-50" href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
+    <li class="list-group-item bg-warning"><a class="text-black-50" href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+  {% else %}
+    <li class="list-group-item"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+  {% endif %}
+
+  <li class="list-group-item bg-dark"><a class="text-white" href="{% url 'tasks:index' %}">Home</a></li>
+  <li class="list-group-item bg-dark"><a class="text-white" href="{% url 'tasks:workers-list' %}">Team Members</a></li>
+  <li class="list-group-item bg-dark"><a class="text-white" href="{% url 'tasks:tasks-list' %}">Tasks Dashboard</a></li>
+</ul>

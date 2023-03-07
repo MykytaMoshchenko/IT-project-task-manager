@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Completed Tasks</h1>
+  <ul>
+    {% for task in tasks_completed %}
+      <li>
+        <a href="{% url 'tasks:task-detail' pk=task.id %}">{{ task.name }}</a>
+      </li>
+    {% empty %}
+      <p class="text-warning">No completed tasks</p>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ task.name }}
+    {% if request.user.is_superuser or request.user in task.assignees.all %}
+      <a href="{% url 'tasks:task-delete' pk=task.id %}" class="btn btn-danger link-to-page">
+        Delete
+      </a>
+    {% endif %}
+  </h1>
+
+  <form method="post" action="{% url 'tasks:task-update' pk=task.id %}" class="d-inline">
+    {% csrf_token %}
+    <input type="hidden" name="is_completed" value="True">
+    <button type="submit" class="btn btn-success">Mark as Completed</button>
+  </form>
+
+  <form method="post" action="{% url 'tasks:task-update' pk=task.id %}" class="d-inline">
+  {% csrf_token %}
+  <input type="hidden" name="is_completed" value="False">
+  <button type="submit" class="btn btn-warning">Mark as Not Completed</button>
+  </form>
+
+
+  <p><strong>Priority:</strong> {{ task.priority }}</p>
+  <p><strong>Deadline:</strong> {{ task.deadline }}</p>
+  <p><strong>Description:</strong> {{ task.description }}</p>
+  <p>
+    <strong>Assignees:</strong> {% for assignee in task.assignees.all %}
+      <a href={% url 'tasks:worker-detail' pk=assignee.id %}>{{ assignee.username }}</a>
+  {% endfor %}
+  </p>
+  <p><strong>Is Completed:</strong> {{ task.is_completed }}</p>
+  <a href="{% url 'tasks:assign-member' pk=task.id %}" class="btn btn-primary">Assign Team Member</a>
+{% endblock %}

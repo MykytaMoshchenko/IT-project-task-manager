@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %} Task Dashboard {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-warning card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">list</i>
+            </div>
+            <p class="card-category">Team Tasks</p>
+            <h3 class="card-title">{{ num_tasks }}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">info</i>
+              <a href="{% url 'tasks:tasks-list' %}" class="text-decoration-none">Show Team Tasks List</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-success card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">beenhere</i>
+            </div>
+            <p class="card-category">Team Solved Tasks</p>
+            <h3 class="card-title">{{num_tasks_is_solved}}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">info</i> <a href="{% url 'tasks:tasks-completed-list' %}">Let's have a look</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-danger card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">directions_run</i>
+            </div>
+            <p class="card-category">Urgent&High Priority Tasks</p>
+            <h3 class="card-title">{{ urgent_and_high}}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">local_offer</i> <a href="{% url 'tasks:high-priority-tasks-list' %}">Let's look inside</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <div class="card">
+          <div class="card-header card-header-tabs card-header-primary">
+            <div class="nav-tabs-navigation">
+              <div class="nav-tabs-wrapper">
+                <span class="nav-tabs-title">Tasks Assigned to Me:</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="tab-pane active" id="profile">
+                <table class="table">
+                  <tbody>
+                  {% if current_user_task_list %}
+                    {% for task in current_user_task_list %}
+                    <tr>
+                      <td><a href="{% url 'tasks:task-detail' pk=task.id %}">{{ task.name }}</a></td>
+                      <td>Deadline: {{ task.deadline}}</td>
+                      {% if task.priority == "Urgent" %}
+                        <td class="text-danger">{{ task.priority}}</td>
+                      {% elif task.priority == "High" %}
+                        <td class="text-danger">{{ task.priority}}</td>
+                      {% elif task.priority == "Medium" %}
+                        <td class="text-warning">{{ task.priority}}</td>
+                      {% elif task.priority == "Low" %}
+                        <td class="text-success">{{ task.priority}}</td>
+                      {% endif %}
+
+                      <td class="td-actions text-right">
+                        <button type="button" rel="tooltip" title="Task Info" class="btn btn-primary btn-link btn-sm" onclick="location.href='{% url 'tasks:task-detail' pk=task.id %}'">
+                          <i class="material-icons">info</i>
+                        </button>
+                        {% if task.is_completed == True %}
+                          <button type="button" rel="tooltip" title="Completed" class="btn btn-success btn-link btn-sm">
+                          <i class="material-icons">done_all</i>
+                          </button>
+                        {% endif %}
+
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  {% else %}
+                    <p>I'm free of tasks. All is completed.</p>
+                  {% endif %}
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <div class="card">
+          <div class="card-header card-header-warning">
+            <h4 class="card-title">Team members</h4>
+{#            <p class="card-category">New employees on 15th September, 2016</p>#}
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-hover">
+              <thead class="text-warning">
+                <th>ID</th>
+                <th>Username</th>
+                <th>Full name</th>
+                <th>Position</th>
+              </thead>
+              <tbody>
+              {% for worker in worker_list %}
+                <tr>
+                  <td>{{ worker.id }}</td>
+                  <td><a class="text-black-50" href="{{ worker.get_absolute_url }}">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
+                  <td>{{ worker.first_name }} {{ worker.last_name }}</td>
+                  <td>{{ worker.position }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Team Tasks with Urgent&High Priority</h1>
+  <ul>
+    {% for task in tasks_uh %}
+      <li>
+        <a href="{% url 'tasks:task-detail' pk=task.id %}">{{ task.name }}</a> - {{ task.deadline }}
+      </li>
+    {% empty %}
+      <p>No tasks with soon deadlines.</p>
+    {% endfor %}
+  </ul>
+{% endblock %}
