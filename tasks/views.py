@@ -122,14 +122,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
             return queryset.filter(name__icontains=name)
 
         if sort_by:
-            if sort_by == "name":
-                queryset = queryset.order_by("name")
-            elif sort_by == "deadline":
-                queryset = queryset.order_by("deadline")
-            elif sort_by == "priority":
-                queryset = queryset.order_by("-priority")
-            elif sort_by == "completed":
-                queryset = queryset.order_by("-is_completed")
+            queryset = queryset.order_by(sort_by)
 
         return queryset
 
