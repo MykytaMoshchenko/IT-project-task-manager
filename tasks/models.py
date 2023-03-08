@@ -6,7 +6,7 @@ from django.db import models
 
 
 class TaskType(models.Model):
-    name = models.CharField(max_length=63)
+    name = models.CharField(max_length=255)
 
     class Meta:
         ordering = ["name"]
@@ -16,7 +16,7 @@ class TaskType(models.Model):
 
 
 class Position(models.Model):
-    name = models.CharField(max_length=63)
+    name = models.CharField(max_length=255)
 
     class Meta:
         ordering = ["name"]
@@ -37,9 +37,9 @@ class Worker(AbstractUser):
         ordering = ["username", "position"]
 
     def __str__(self) -> str:
-        return f"username: {self.username} |" \
-               f" full_name: {self.first_name} {self.last_name} |" \
-               f" position: {self.position}"
+        return (f"username: {self.username} |" +
+                f" full_name: {self.first_name} {self.last_name} |" +
+                f" position: {self.position}")
 
     def get_absolute_url(self):
         return reverse("tasks:worker-detail", kwargs={"pk": self.pk})
@@ -52,8 +52,8 @@ class Task(models.Model):
         MEDIUM = "Medium", "Medium"
         LOW = "Low", "Low"
 
-    name = models.CharField(max_length=50)
-    description = models.TextField(max_length=300)
+    name = models.CharField(max_length=255)
+    description = models.TextField(max_length=255)
     deadline = models.DateField()
     is_completed = models.BooleanField(verbose_name="task_status", default=False)
     priority = models.CharField(max_length=6, choices=PriorityType.choices)

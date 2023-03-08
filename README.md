@@ -4,7 +4,7 @@ Django project for managing tasks of it-team
 
 ## Checkit out!
 
-[IT-project-task-manager deployed to render.com](PAST_LINK)
+[IT-project-task-manager deployed to render.com](https://it-task-manager-sdp7.onrender.com/)
 
 ## Installation
 

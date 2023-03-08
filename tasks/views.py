@@ -16,7 +16,7 @@ from .forms import (
     TaskSearchForm,
     AssigneesForm
 )
-from .models import TaskType, Worker, Task, Position
+from .models import Worker, Task
 
 
 @login_required
@@ -28,8 +28,6 @@ def index(request):
     num_workers = worker_list.count()
     num_tasks = tasks_list.count()
     num_tasks_is_solved = tasks_list.filter(is_completed=True).count()
-    # num_tasks_high_priority = tasks_list.filter(priority="High", is_completed=False).count()
-    # num_tasks_urgent_priority = tasks_list.filter(priority="Urgent", is_completed=False).count()
     urgent_and_high = tasks_list.filter(priority__in=["Urgent", "High"], is_completed=False).count()
     current_user_task_list = tasks_list.filter(assignees__in=[request.user.id])
 
@@ -37,8 +35,6 @@ def index(request):
         "num_workers": num_workers,
         "num_tasks": num_tasks,
         "num_tasks_is_solved": num_tasks_is_solved,
-        # "num_tasks_high_priority":  num_tasks_high_priority,
-        # "num_tasks_urgent_priority": num_tasks_urgent_priority,
         "urgent_and_high": urgent_and_high,
         "worker_list": worker_list,
         "current_user_task_list": current_user_task_list,
