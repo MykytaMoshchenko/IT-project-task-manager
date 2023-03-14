@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-
+from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -48,7 +48,7 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     model = Worker
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> Any:
         context = super(WorkerListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
         context["search_form"] = WorkerSearchForm(
@@ -57,7 +57,7 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> Any:
         queryset = Worker.objects.select_related("position")
         username = self.request.GET.get("username")
 
@@ -71,7 +71,7 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
     queryset = Worker.objects.select_related("position")
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> Any:
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['is_admin'] = user.is_superuser
@@ -98,7 +98,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     paginate_by = 8
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> Any:
         context = super(TaskListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
         sort_by = self.request.GET.get("sort_by", "")
@@ -109,7 +109,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> Any:
         queryset = Task.objects.prefetch_related("assignees")
         name = self.request.GET.get("name")
         sort_by = self.request.GET.get("sort_by")
@@ -127,7 +127,7 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
     queryset = Task.objects.prefetch_related("assignees")
 
-    def is_complete(self):
+    def is_complete(self) -> Any:
         task = self.get_object()
         if self.request.method == "POST":
             is_completed = self.request.POST.get("is_completed")
@@ -157,10 +157,10 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     # success_url = reverse_lazy("tasks:tasks-list")
     fields = ["is_completed"]
 
-    def get_success_url(self):
+    def get_success_url(self) -> Any:
         return reverse('tasks:task-detail', kwargs={'pk': self.object.pk})
 
-    def form_valid(self, form):
+    def form_valid(self, form) -> Any:
         task = form.save(commit=False)
         is_completed = form.cleaned_data.get('is_completed')
         if is_completed is not None:
@@ -179,12 +179,12 @@ class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
 class TaskAssignView(View):
     template_name = "tasks/assign_user.html"
 
-    def get(self, request, pk):
+    def get(self, request, pk) -> Any:
         task = get_object_or_404(Task, pk=pk)
         form = AssigneesForm(initial={"assignees": task.assignees.all()})
         return render(request, self.template_name, {"form": form, "task": task})
 
-    def post(self, request, pk):
+    def post(self, request, pk) -> Any:
         task = get_object_or_404(Task, pk=pk)
         form = AssigneesForm(request.POST)
         if form.is_valid():
@@ -198,7 +198,7 @@ class TaskAssignView(View):
 class NotificationView(LoginRequiredMixin, View):
     template_name = "tasks/notifications.html"
 
-    def get(self, request):
+    def get(self, request) -> Any:
         user = request.user
         deadline = datetime.now() + timedelta(days=3)
         tasks = Task.objects.prefetch_related(
@@ -217,7 +217,7 @@ class NotificationView(LoginRequiredMixin, View):
 class TaskUrgentHighView(LoginRequiredMixin, View):
     template_name = "tasks/urgent_high_priority_task_list.html"
 
-    def get(self, request):
+    def get(self, request) -> Any:
         tasks_uh = Task.objects.prefetch_related(
             "assignees"
         ).filter(priority__in=["Urgent", "High"], is_completed=False)
@@ -231,7 +231,7 @@ class TaskUrgentHighView(LoginRequiredMixin, View):
 class TaskCompletedView(LoginRequiredMixin, View):
     template_name = "tasks/completed_tasks_list.html"
 
-    def get(self, request):
+    def get(self, request) -> Any:
         tasks_completed = Task.objects.prefetch_related(
             "assignees"
         ).filter(is_completed=True)
