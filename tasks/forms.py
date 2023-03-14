@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
+
 from tasks.models import Worker, Task, Position
 
 
@@ -10,7 +11,7 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 
-def validate_position(position):
+def validate_position(position: Position) -> Position:
     if position not in Position.objects.all():
         raise ValidationError(
             "Position must be one of the defined in the Task Manager"
@@ -35,7 +36,7 @@ class AssigneesForm(forms.ModelForm):
         model = Task
         fields = ["assignees"]
 
-    def clean_position(self):
+    def clean_position(self) -> Position:
         return validate_position(self.cleaned_data["assignees"])
 
 
@@ -44,7 +45,7 @@ class WorkerPositionUpdateForm(forms.ModelForm):
         model = Worker
         fields = ["position"]
 
-    def clean_position(self):
+    def clean_position(self) -> Position:
         return validate_position(self.cleaned_data["position"])
 
 
