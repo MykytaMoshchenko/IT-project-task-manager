@@ -6,6 +6,10 @@ Django project for managing tasks of it-team
 
 [IT-project-task-manager deployed to render.com](PAST_LINK)
 
+```
+username: test_user
+password: worker_test!
+```
 ## Installation
 
 Python3 must be already installed.
