@@ -6,6 +6,11 @@ Django project for managing tasks of it-team
 
 [IT-project-task-manager deployed to render.com](https://it-task-manager-sdp7.onrender.com/)
 
+```
+username: test_user
+password: worker_test!
+```
+
 ## Installation
 
 Python3 must be already installed.
