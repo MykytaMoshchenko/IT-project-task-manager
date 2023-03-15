@@ -1,5 +1,5 @@
 .idea/
-ven
+venv/
 **__pycache__/
 material-dashboard-django/
 static/assets/demo/

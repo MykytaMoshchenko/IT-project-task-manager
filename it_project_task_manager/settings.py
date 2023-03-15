@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
-from pathlib import Path
 import dj_database_url
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,13 +22,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
-    "DJANGO_SECRET_KEY"
+    "DJANGO_SECRET_KEY",
+    "*e0%s^^4oc8^oop1s^%j2mxdg^4pzoyi5_vu-cj-1!xispw1x0"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
+# DEBUG = True
+# DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
+DEBUG = "RENDER" not in os.environ
 
-ALLOWED_HOSTS = ["127.0.0.1", "https://it-team-task-manager.onrender.com/"]
+
+ALLOWED_HOSTS = ["127.0.0.1", "https://it-task-manager-sdp7.onrender.com"]
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -45,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "tasks",
     "crispy_forms",
+    "crispy_bootstrap4",
     "debug_toolbar"
 ]
 
@@ -94,10 +103,8 @@ DATABASES = {
     }
 }
 
-# dj-database-url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES["default"].update(db_from_env)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
